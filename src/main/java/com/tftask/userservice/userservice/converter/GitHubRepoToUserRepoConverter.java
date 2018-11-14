@@ -1,6 +1,7 @@
 package com.tftask.userservice.userservice.converter;
 
 import com.tftask.userservice.dao.UserRepo;
+import com.tftask.userservice.dao.builder.UserRepoBuilder;
 import org.springframework.social.github.api.GitHubRepo;
 import org.springframework.stereotype.Component;
 
@@ -8,17 +9,13 @@ import org.springframework.stereotype.Component;
 public class GitHubRepoToUserRepoConverter {
 
     public UserRepo convert(GitHubRepo gitHubRepo, String username){
-        UserRepo userRepo = new UserRepo(username);
-        userRepo.setName(gitHubRepo.getName());
-        userRepo.setCloneUrl(gitHubRepo.getCloneUrl());
-        userRepo.setDescription(gitHubRepo.getDescription());
-        userRepo.setGitUrl(gitHubRepo.getGitUrl());
-        userRepo.setHtmlUrl(gitHubRepo.getHtmlUrl());
-        userRepo.setId(gitHubRepo.getId());
-        userRepo.setSshUrl(gitHubRepo.getSshUrl());
-        userRepo.setSvnUrl(gitHubRepo.getSvnUrl());
-        userRepo.setUrl(gitHubRepo.getUrl());
 
-        return userRepo;
+        return new UserRepoBuilder(username, gitHubRepo.getId(), gitHubRepo.getName(), gitHubRepo.getDescription(), gitHubRepo.getUrl())
+                .withCloneUrl(gitHubRepo.getCloneUrl())
+                .withGitUrl(gitHubRepo.getGitUrl())
+                .withHtmlUrl(gitHubRepo.getHtmlUrl())
+                .withSshUrl(gitHubRepo.getSshUrl())
+                .withSvnUrl(gitHubRepo.getSvnUrl())
+                .build();
     }
 }
