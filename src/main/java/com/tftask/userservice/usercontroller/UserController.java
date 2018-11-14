@@ -1,6 +1,7 @@
 package com.tftask.userservice.usercontroller;
 
 import com.tftask.userservice.dao.UserRepo;
+import com.tftask.userservice.dao.UserServiceEndpoint;
 import com.tftask.userservice.userservice.UserService;
 import com.tftask.userservice.usercontroller.exception.GlobalExceptionHandler;
 import com.tftask.userservice.usercontroller.validator.UsernameValidator;
@@ -25,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/endpoints", method = RequestMethod.GET)
-    public @ResponseBody Object getAllSystemEndpoints() {
+    public List<UserServiceEndpoint> getAllSystemEndpoints() {
         return userService.getSystemEndpoints(requestMappingHandlerMapping);
     }
 

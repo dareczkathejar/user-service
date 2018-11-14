@@ -1,6 +1,7 @@
 package com.tftask.userservice.userservice;
 
  import com.tftask.userservice.dao.UserRepo;
+ import com.tftask.userservice.dao.UserServiceEndpoint;
  import com.tftask.userservice.userservice.converter.GitHubRepoToUserRepoConverter;
  import com.tftask.userservice.userservice.exception.GitHubAccountNotFoundException;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GitHubRepoToUserRepoConverter gitHubRepoToUserRepoConverter;
 
-    public Object[] getSystemEndpoints(RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        return requestMappingHandlerMapping.getHandlerMethods().keySet().stream().map(t ->
-                (t.getMethodsCondition().getMethods().size() == 0 ? "GET" : t.getMethodsCondition().getMethods().toArray()[0]) + " " +
-                        t.getPatternsCondition().getPatterns().toArray()[0]
-        ).toArray();
+    public List<UserServiceEndpoint> getSystemEndpoints(RequestMappingHandlerMapping requestMappingHandlerMapping) {
+        return requestMappingHandlerMapping.getHandlerMethods().keySet().stream().map(
+                t -> new UserServiceEndpoint(t.getMethodsCondition().toString(), t.getPatternsCondition().toString()))
+                .collect(Collectors.toList());
     }
 
     @Override
